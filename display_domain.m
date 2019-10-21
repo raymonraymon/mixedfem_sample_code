@@ -11,21 +11,26 @@ function display_domain(F,V,Omega,N0,N1,N2,outside_region_of_interest,phong)
     limit_faces(F,Omega), ...
     V(:,1),V(:,2),V(:,3), ...
     'FaceColor',[1.0,0.9,0.1]);
+  %内部面，需要至少一个索引在Omega里面
   hold on;
   trisurf( ...
     limit_faces(F,[N0, N1, N2, outside_region_of_interest],1), ...
     V(:,1),V(:,2),V(:,3), ...
     'FaceColor',[0.2,0.1,0.6]);
+   %外部面，需要三个索引都在[N0, N1, N2, outside_region_of_interest]里面
   hold on;
   % Display rows in the exterior
   plot3(V(N0,1),V(N0,2),V(N0,3), ...
     'o','MarkerEdgeColor',[0,0,0], 'MarkerFaceColor',[0.5,0.1,0.1]);
+  %画N0点
   hold on;
   plot3(V(N1,1),V(N1,2),V(N1,3), ...
     's','MarkerEdgeColor',[0,0,0], 'MarkerFaceColor',[0.1,0.1,0.5]);
+  %画N1点
   hold on;
   plot3(V(N2,1),V(N2,2),V(N2,3), ...
     'd','MarkerEdgeColor',[0,0,0], 'MarkerFaceColor',[0.1,0.5,0.1]);
+  %画N2点
   view(2);
   legend('Omega','Exterior','N0','N1','N2');
   

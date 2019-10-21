@@ -50,8 +50,13 @@ function [Omega,N0,N1,N2,outside_region_of_interest ] = ...
   shrinking_handle = H;
   growing_interior = Omega;
 
+  % C = intersect(A,B,'rows')
+  % Define two matrices with rows in common
+  
   interior_faces = intersect(F,F.*ismember(F,growing_interior),'rows');
+  %F的三个索引要全在growing_interior才行
   handle_faces = intersect(F,F.*~ismember(F,growing_interior),'rows');
+  %F的三个索引要都不在growing_interior才行
   H0 = setdiff(F,union(handle_faces,interior_faces,'rows'),'rows');
   N0 = intersect(shrinking_handle,reshape(H0,1,size(H0,1)*size(H0,2)));
   growing_interior = [growing_interior N0];

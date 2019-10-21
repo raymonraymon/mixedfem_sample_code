@@ -35,7 +35,12 @@ function tsurf(F,V,vertex_indices,face_indices)
     error('V must be #V x 3 or #V x 2');
     return;
   end
-
+  
+  
+  %trisurf(Tri,X,Y,Z,C)  displays triangles defined in the m-by-3 face 
+  %matrix Tri as a surface. Each row of Tri defines a single triangular
+  %face by indexing into the vectors or matrices that contain the X, Y, and
+  %Z vertices. The color is defined by the vector C.
   trisurf(F,V(:,1),V(:,2),V(:,3));
 
   % if 2d then set to view (x,y) plane
@@ -43,6 +48,7 @@ function tsurf(F,V,vertex_indices,face_indices)
     view(2);
   end
 
+  %标注面索引
   if(face_indices==1)
     FC = (V(F(:,1),:)+V(F(:,2),:)+V(F(:,3),:))./3;
     text(FC(:,1),FC(:,2),FC(:,3),num2str((1:size(F,1))'),'BackgroundColor',[.8 .8 .8]);
@@ -50,7 +56,7 @@ function tsurf(F,V,vertex_indices,face_indices)
     FC = (V(F(:,1),:)+V(F(:,2),:)+V(F(:,3),:))./3;
     text(FC(:,1),FC(:,2),FC(:,3),num2str((1:size(F,1))'));
   end
-
+  %标注点索引
   if(vertex_indices==1)
     text(V(:,1),V(:,2),V(:,3),num2str((1:size(V,1))'),'BackgroundColor',[.8 .8 .8]);
   elseif(vertex_indices)

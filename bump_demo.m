@@ -1,4 +1,4 @@
-clc;clear all;close all;
+clc;clear all;close all;dbstop if error
 % bump_demo.m
 % This is a sample program illustrating how to:
 %   - Generate a 3D planar triangle mesh, regular or irregular grid
@@ -147,8 +147,8 @@ exterior = indices( ...
 % Define,
 % Omega: interior from now on
 % N0: First row into exterior, i.e. boundary between interior and exterior
-% N1: 2nd row into exterior, i.e. boundary between Omega âˆ?N0 and exterior \ N0
-% N2: 3nd row into exterior, i.e. boundary between Omega âˆ?N0 âˆ?N1 and
+% N1: 2nd row into exterior, i.e. boundary between Omega u N0 and exterior \ N0
+% N2: 3nd row into exterior, i.e. boundary between Omega u N0 u N1 and
 %     exterior \ N0 \ N1
 % (handle is a legacy term for exterior)
 [Omega, N0, N1, N2, outside_region_of_interest] = ...

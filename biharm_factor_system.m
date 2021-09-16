@@ -23,14 +23,8 @@ function [L,U,P,Q,R, S, M] = biharm_factor_system( ...
   % bndtype:  boundary condition type, ('ext', 'deriv') 
   %   ext means that two rows of x are fixed; deriv means that  1 row of
   %   x is fixed and dx/dn is specified on the same row.
-  %   'ext' region conditions (need to fix two rows into exterior)
-  %   'deriv' curve conditions (need to fix one row and specify tangents)
-  
   % masstype:  type of mass matrix to use ('full', 'barycentric', 'voronoi')
   % reduction: reduce to a single variable x or keep x,y ('flatten','no_flatten')
-  %   'flatten' reduce system, only valid for region conditions 
-  %             [Botsch and Kobbelt, 2004]
-  %   'no_flatten' do NOT reduce system, valid for all boundary conditions
   % Omega: interior of the domain
   % N0: boundary of the domain
   % N1: one layer outside the domain
@@ -52,14 +46,12 @@ function [L,U,P,Q,R, S, M] = biharm_factor_system( ...
   %
   % Copyright 2010, Alec Jacobson, NYU
   %
-
   interest = [Omega N0 N1 ];
   % Don't both with faces outside of region of interest
   F = F( ...
     ismember(F(:,1),interest) & ...
     ismember(F(:,2),interest) & ...
     ismember(F(:,3),interest),:)';  
- % F的三个索引都要在insterest的范围内
 
   all = [N0 Omega];
 
@@ -70,7 +62,6 @@ function [L,U,P,Q,R, S, M] = biharm_factor_system( ...
                             ismember(F(3,:),all)); 
     S =  cotmatrix(V, interior_faces);  
     M = massmatrix(V, interior_faces, masstype);
-    % 如果为deriv就不需要算那么多了，只需要算[N0 Omega]部分
   else % bndtype == 'ext'
     S = cotmatrix(V, F);  
     M = massmatrix(V, F, masstype);
@@ -79,9 +70,6 @@ function [L,U,P,Q,R, S, M] = biharm_factor_system( ...
   if strcmp(reduction,'flatten')
     % system matrix for the system with x as variable only
     % obtained by eliminating y = M^{-1} (S_{all,Omega} - rhs_Dx)
-    % Reduce system to only solve for u (eliminate auxillary variables by inverting
-    % the diagonal mass matrix) 
-    % 论文中通过消掉V_Omega_bar来实现,即这里使用公式11
     A = S(Omega,all) * (M(all,all) \ S(all,Omega)); 
   else % full matrix
     % system matrix for x,y variables
@@ -89,15 +77,8 @@ function [L,U,P,Q,R, S, M] = biharm_factor_system( ...
     Z_Omega_Omega = sparse(n_Omega, n_Omega);
     A = [ -M(all,all)      S(  all,Omega);   ...
            S(Omega,all)    Z_Omega_Omega  ];     
-    %这里使用公式10   
   end
 
   % factorize A
   [L,U,P,Q,R] = lu(A);
-  %[L,U,P,Q,R] = lu(A) returns unit lower triangular matrix L, upper 
-  %triangular matrix U, permutation matrices P and Q, and a diagonal 
-  %scaling matrix R so that P*(R\A)*Q = L*U for sparse non-empty A. 
-  %Typically, but not always, the row-scaling leads to a sparser and more 
-  %stable factorization. The statement lu(A,'matrix') returns identical 
-  %output values.
 end

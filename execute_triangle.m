@@ -15,7 +15,7 @@ function [F,V] = execute_triangle(command_line_args, poly_file_name_prefix)
 
   % hard code this for my computer for now, need to find out how to find
   % triangle...'which triangle' does not work
-  path_to_triangle = 'F:\Resource\Smartee_copy\papers\ComposedSelf\WaxFill\matlab\MeshGenerate\triangle.exe';
+  %path_to_triangle = '/opt/local/bin/triangle';
 
   [status, result] =system( ...
     [path_to_triangle ' ' command_line_args ' ' poly_file_name_prefix '.poly']);

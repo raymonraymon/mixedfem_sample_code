@@ -1,6 +1,3 @@
-# mixedfem_sample_code
-Mixed Finite Elements for Variational Surface Modeling.https://igl.ethz.ch/projects/mixed-fem/
-
 Contained in this directory are:
   biharm_factor_system.m
   biharm_solve_with_factor.m

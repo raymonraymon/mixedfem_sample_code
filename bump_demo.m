@@ -1,4 +1,3 @@
-clc;clear all;close all;dbstop if error
 % bump_demo.m
 % This is a sample program illustrating how to:
 %   - Generate a 3D planar triangle mesh, regular or irregular grid
@@ -18,7 +17,10 @@ clc;clear all;close all;dbstop if error
 %
 % Copyright 2010, Alec Jacobson, NYU
 %
-
+clc
+clear;
+close all
+dbstop if error
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Parameters for this sample program
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -36,7 +38,7 @@ masstype = 'voronoi';
 % Determines boundary type for biharmonic system
 %   'ext' region conditions (need to fix two rows into exterior)
 %   'deriv' curve conditions (need to fix one row and specify tangents)
-bi_bndtype = 'ext';
+bi_bndtype = 'deriv';
 % Determines boundary type for triharmonic system
 %   'extx' region conditions (need to fix three rows into exterior)
 %   'extxy' extension curve conditions (need to fix two rows and specify bezier
@@ -87,7 +89,7 @@ elseif(strcmp(mesh_type,'irregular'))
   % Minimum angle in degrees for angles on generated triangles:
   %   higher -> more extra points, better mesh quality
   %   lower -> fewer extra points, worse mesh quality
-  min_angle = 30;
+  min_angle =30;
   % Variation from regular, how far from the regular positions we are allowed
   % to throw the "darts":
   %   higher -> more random, more irregular mesh
@@ -147,8 +149,8 @@ exterior = indices( ...
 % Define,
 % Omega: interior from now on
 % N0: First row into exterior, i.e. boundary between interior and exterior
-% N1: 2nd row into exterior, i.e. boundary between Omega u N0 and exterior \ N0
-% N2: 3nd row into exterior, i.e. boundary between Omega u N0 u N1 and
+% N1: 2nd row into exterior, i.e. boundary between Omega âˆ?N0 and exterior \ N0
+% N2: 3nd row into exterior, i.e. boundary between Omega âˆ?N0 âˆ?N1 and
 %     exterior \ N0 \ N1
 % (handle is a legacy term for exterior)
 [Omega, N0, N1, N2, outside_region_of_interest] = ...
@@ -282,14 +284,16 @@ if(strcmp(tri_bndtype,'extxy'))
   % point first segment toward center
   BZ1(outer_N1,:) = ...
     [(0.5-V(outer_N1,1)) (0.5-V(outer_N1,2)) 0.0*V(outer_N1,3)];
+  BZ1(outer_N1,:) = normalizerow(BZ1(outer_N1,:));
   % normalize and multiply by magnitude
-  BZ1(outer_N1,:) = ...
-    BZ1(outer_N1,:)./repmat(sqrt(sum(BZ1(outer_N1,:).^2,2)),1,3)*magnitude;
+%   BZ1(outer_N1,:) = ...
+%     BZ1(outer_N1,:)./repmat(sqrt(sum(BZ1(outer_N1,:).^2,2)),1,3)*magnitude;
   BZ2(outer_N1,:) = ...
     [(0.5-V(outer_N1,1)) (0.5-V(outer_N1,2)) 0.0*V(outer_N1,3)];
   % normalize and multiply by magnitude
-  BZ2(outer_N1,:) = ...
-    BZ2(outer_N1,:)./repmat(sqrt(sum(BZ2(outer_N1,:).^2,2)),1,3)*magnitude;
+  BZ2(outer_N1,:) = normalizerow(BZ2(outer_N1,:));
+%   BZ2(outer_N1,:) = ...
+%     BZ2(outer_N1,:)./repmat(sqrt(sum(BZ2(outer_N1,:).^2,2)),1,3)*magnitude;
 end
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

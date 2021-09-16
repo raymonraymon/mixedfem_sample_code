@@ -66,8 +66,6 @@ v4_wrap = idx_wrap(2:end  , 2:end  ); v4_wrap=v4_wrap(:)';
 
 F_wrap = [v1_wrap;v2_wrap;v3_wrap; v2_wrap;v4_wrap;v3_wrap];
 F_wrap = reshape(F_wrap, [3, 2*length(v1_wrap)])';
-% 三角形的索引
-
 
 % old way
 % edges = [F_wrap(:,1) F_wrap(:,2); F_wrap(:,2) F_wrap(:,3); F_wrap(:,3) F_wrap(:,1)];
@@ -80,8 +78,6 @@ edge_norms = [ ...
   sqrt(sum((UV_wrap(F_wrap(:,3),:)-UV_wrap(F_wrap(:,1),:)).^2,2)) ...
   sqrt(sum((UV_wrap(F_wrap(:,1),:)-UV_wrap(F_wrap(:,2),:)).^2,2)) ...
   ];
-%边长
-
 
 % correct indices
 res = [yRes,xRes];
@@ -90,11 +86,9 @@ if (xWrap) idx = [idx, idx(:,1)]; end
 if (yWrap) idx = [idx; idx(1,:)]; end
 idx_flat = idx(:);
 
-%重复右和下各重复一个像素
-
 % this might not be neccessary, could just rebuild UV like before
-UV = reshape(UV_wrap,[size(idx_wrap),2]);%分两层
+UV = reshape(UV_wrap,[size(idx_wrap),2]);
 UV = UV(1:end-yWrap,1:end-xWrap,:);
 UV = reshape(UV,xRes*yRes,2);
-%   UV: UV coordinates in interval [0,1]x[0,1]， 没重复部分的UV坐标
+
 F = [idx_flat(F_wrap(:,1)),idx_flat(F_wrap(:,2)),idx_flat(F_wrap(:,3))];

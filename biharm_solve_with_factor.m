@@ -51,28 +51,16 @@ function [xV] = biharm_solve_with_factor( ...
       % in this case, we use the values on the border row
       % to evaluate the rhs
       rhs_Dx = -S(all,N0)*b0(:,coord_index) - S(all,N1)*f1(:,coord_index);
-      %rhs_Dx = -S(all,N0)*b0(:,coord_index);
-      % 10式右上角部分
     end
     rhs_Dy = zeros(size(Omega,2),1);
     if strcmp(reduction,'flatten')
         rhs = rhs_Dy + S(Omega,all) * (M(all,all) \ rhs_Dx);
-        % 11式右边部分
     else % full matrix
         rhs = [ rhs_Dx; rhs_Dy];   
     end
     % back substitute to solve for this coordinate
     sol = Q*(U\(L\(P*(R\rhs))));
-    % P*(R\A)*Q = L*U -> P*(R\A) = (L*U)/Q
-    % A*sol = rhs
-    % (R\A)*sol = R\rhs
-    % P*(R\A)*sol = P*(R\rhs)
-    % ((L*U)/Q)*sol = P*(R\rhs)
-    % (U/Q)*sol = L\(P*(R\rhs))
-    % (1/Q)*sol = U\(L\(P*(R\rhs)))
-    % sol = Q*(U\(L\(P*(R\rhs))))
-    
-    
+
     % extract just primary variable's values 
     if(strcmp(reduction,'no_flatten'))
       ny = size(all,2);
